@@ -11,6 +11,7 @@
  #include <string.h>    // strlen
  #include <sys/socket.h>
  #include <arpa/inet.h> //inet_addr
+ #include <unistd.h>
  #define PORT 80
 
  int main(int argc, char const *argv[])
@@ -55,14 +56,17 @@
     printf("Successfully data sent.\n");
 
     // 4. Receive data over socket
-    char server_reply[2048];
-    if (recv(socket_desc, server_reply, 2048, 0) < 0)
+    char server_reply[4096];
+    if (recv(socket_desc, server_reply, 4096, 0) < 0)
     {
         perror("Error Receive data");
         exit(EXIT_FAILURE);
     }
     printf("Reply from server received:\n");
     printf("%s\n",server_reply);
+
+    // 5. Close socket
+    close(socket_desc);
 
     return 0;
  }

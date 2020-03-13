@@ -8,8 +8,10 @@
 
  #include <stdio.h>
  #include <stdlib.h>
+ #include <string.h>    // strlen
  #include <sys/socket.h>
  #include <arpa/inet.h> //inet_addr
+ #include <unistd.h>
  #define PORT 80
 
  int main(int argc, char const *argv[])
@@ -22,7 +24,7 @@
 
      if (socket_desc == -1 )
      {
-         perror("Create socket");
+         perror("Error Create socket");
          exit(EXIT_FAILURE);
      }
 
@@ -38,10 +40,33 @@
     // Connect to remote server
     if (connect(socket_desc, (struct sockaddr *)&server, sizeof(server)) < 0)
     {
-        perror("Connect to server");
+        perror("Error Connect to server");
         exit(EXIT_FAILURE);
     }
     printf("Successfully connect to server: %u\n", server.sin_addr.s_addr);
+
+    // 3. Send data over socket
+    char *message;
+    message = "GET / HTTP/1.1\r\n\r\n";
+    if (send(socket_desc, message, strlen(message), 0) < 0)
+    {
+        perror("Error Send data");
+        exit(EXIT_FAILURE);
+    }
+    printf("Successfully data sent.\n");
+
+    // 4. Receive data over socket
+    char server_reply[4096];
+    if (recv(socket_desc, server_reply, 4096, 0) < 0)
+    {
+        perror("Error Receive data");
+        exit(EXIT_FAILURE);
+    }
+    printf("Reply from server received:\n");
+    printf("%s\n",server_reply);
+
+    // 5. Close socket
+    close(socket_desc);
 
     return 0;
  }
