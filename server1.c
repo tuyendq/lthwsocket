@@ -54,6 +54,16 @@
     }
     printf("Successfully data sent.\n");
 
+    // 4. Receive data over socket
+    char server_reply[2048];
+    if (recv(socket_desc, server_reply, 2048, 0) < 0)
+    {
+        perror("Error Receive data");
+        exit(EXIT_FAILURE);
+    }
+    printf("Reply from server received:\n");
+    printf("%s\n",server_reply);
+
     return 0;
  }
 
