@@ -1,5 +1,8 @@
 /**
-* Example winsock on Windows
+* Example winsock programming on Windows
+* https://www.binarytides.com/winsock-socket-programming-tutorial/
+* Compile using msys2 on windows 10
+* $ gcc winsock-ex1.c -l"ws2_32" -o winsock-ex1
 */
 
 #include <stdio.h>
